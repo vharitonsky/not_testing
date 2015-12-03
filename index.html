@@ -1,0 +1,286 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Not testing@project</title>
+
+		<meta name="description" content="Why I should test">
+		<meta name="author" content="Vitaliy Haritonsky">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/moon.css" id="theme">
+
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<div class="reveal">
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h1>State of tests@project in 2015</h1>
+				</section>
+				<section>
+					<h1>CODE</h1>
+					<h2>python - 2554 files/630 kloc</h2>
+					<h2>js/coffescript - 2300 files/180 kloc</h2>
+				</section>
+				<section>
+					<h2>unittest - 375 files/44.5 kloc/1737 tests</h2>
+					<h2>selenium - 733 files/63.8 kloc/1058 tests</h2>
+					<h2>jasmine/karma - 7 files/304 loc/15? tests</h2>
+				</section>
+				<section>
+					<h1>Coverage</h1>
+					<h2>UNKNOWN</h2>
+				</section>
+				<section>
+					<h1>How this does not break every day?</h1>
+				</section>
+				<section>
+					<h2>AWESOME!</h2>
+					<img height="500px" src="img/moon_face.jpg"/>
+				</section>
+				<section>
+					<h1>Actually it does</h1>
+					<h2>124 critical/major bugs this month</h2>
+					<h2>6.2 bugs every day</h2>
+				</section>
+				<section>
+					<h2>Days since kaiju attack?</h2>
+					<img src="img/warclock.jpg" />
+				</section>
+				<section>
+					<h2>Builds since 5 Jan 2015</h1>
+					<h1>Total 10270</h1>
+				</section>
+				<section>
+					<h1>Fails: 5027</h1>
+					<h1>Passes: 5243</h1>
+				</section>
+				<section>
+					<img src="img/coin.jpg">
+				</section>
+				<section>
+					<h1>Why am I not writing tests?</h1>
+				</section>
+				<section>
+					<h1>No time to explain!</h1>
+				</section>
+				<section>
+					<h2>Easier to test in isolation</h2>
+					<h2>Than to reproduce the whole case</h2>
+				</section>
+				<section>
+					<h1>Cycle of Doom</h1>
+					<h2>Ctrl+S -> Alt-Tab -> F5 -> Alt-Tab</h2>
+				</section>
+				<section>
+					<h1>Cycle of Happiness</h1>
+					<h2>Ctrl+S -> Ctrl+S -> Ctrl+S</h2>
+				</section>
+				<section>
+					<img  src="img/hot.gif"/>
+				</section>
+				<section>
+					<h1>Code becomes outdated fast!</h1>
+				</section>
+				<section>
+					<h2>Some commits in the code are from 2010</h2>
+					<h2>There are bugs in them too</h2>
+				</section>
+				<section>
+					<h1>But how do I even?</h1>
+				</section>
+				<section>
+					<pre><code class="python">
+from project.lib.testing.testcase import TestCase
+
+class TestMath(TestCase):
+
+	def test_plus(self):
+		self.assertEqual(2 + 2, 4, "Something is awry")
+					</code></pre>
+			<pre><code class="bash">
+				pi test app -t project/tests/test_math.py
+			</code>
+			</pre>
+		<pre><code class="bash">
+			make test tests=project/tests/test_math
+		</code>
+		</pre>
+				</section>
+				<section>
+					<h1>It's a simple controller with an action!</h1>
+				</section>
+				<section>
+					<h2>Smoke test it</h2>
+					<pre>
+						<code class="python">
+class PublicationListTestCase(TestCase):
+    records = [CompanyOwnerAndAdmin]
+
+    def test_smoke_publication_list_page(self):
+        login(CompanyOwnerAndAdmin)
+        page_url = url.cabinet.absolute(
+            controller='publication',
+            action='index'
+        )
+        resp = app.get(page_url)
+
+        self.assertEqual(200, resp.status_int)
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h1>Fixtures WTF?</h1>
+				</section>
+				<section>
+					<pre><code class="stretch python">
+class BaseAttributeBinding(Record):
+    __model__ = AttributeBinding
+
+    id = unique(rand.int, min=2 ** 30, max=2 ** 31 - 1)
+    attribute = BaseAttribute
+    category = BaseProductCategory
+    position = unique(rand.int, min=2 ** 30, max=2 ** 31 - 1)
+    user = BaseUser
+    help = unique(rand.unicode, 255)
+    group = BaseAttributeBindingGroup
+	attribute_values = [BaseMultiSelectAttributeValue]
+	value = {
+        "munit_id": 36011,  # кг
+        "min": None,
+        "max": None,
+    }
+					</code></pre>
+				</section>
+				<section>
+					<h1>What about side effects ?</h1>
+				</section>
+				<section>
+					<h2>Catch 'em</h2>
+					<pre>
+						<code class="Python">
+from project.lib.testing.mailbox import mailbox
+from project.lib.testing.taskqueue import taskqueue_ctx, taskqueue
+
+class TestAuctionNotification(TestCase):
+    records = [ActiveStatePurchase, Merchant]
+    context_managers = [request_ctx, taskqueue_ctx]
+
+    def test_email_notification(self):
+    	notify_auction_next_day()
+    	self.assertEqual(len(mailbox), 1)
+    	notify_auction_next_day.delay()
+    	self.assertEqual(len(taskqueue), 1)
+						</code>
+					</pre>
+				</section>
+				<section>
+					<h1>I have an external dependency!</h1>
+				</section>
+				<section>
+					<h2>Mock It</h2>
+					<pre><code class="python">
+from mock import patch
+
+class TestApiRequest(unittest.TestCase):
+    @patch('requests.post',
+	_patch_request_post_citywarehouses_response)
+    def test_api_request_with_correct_response(self):
+        query = ['file', {}, [
+            ['auth', {}, u"Ваш Ключ"],
+            ['citywarehouses', {}, []],
+        ]]
+        result, error = api_request(query)
+        self.assertIsNone(error)
+        self.assertIsNotNone(result)
+					</code>
+					</pre>
+				</section>
+				<section>
+					<h1>It's in client side!</h1>
+				</section>
+				<section>
+					<h2>Instant Karma</h2>
+					<pre><code class="stretch javascript">
+describe("VendorPeek Test Suite", function(){
+    beforeEach(function(){
+       $(document.body).append($("&lt;div id='container'&gt;"))
+    });
+    it("support company row must contain something", function(){
+        render(
+            SupportCompanyRow({
+                first: true,
+                name:"Samsung",
+                address:"Somewhere"}),
+            $("#container")
+        );
+        var html = $("#container").html();
+        expect(html).not.toEqual('');
+    });
+					</code></pre>
+				</section>
+				<section>
+					<h3>Tests start falling misteriously after midnight!</h3>
+					<img src="img/full-moon-monster.jpg"/>
+				</section>
+				<section>
+					<h2>Date is saved as UTC</h2>
+					<h2>But then checked as GMT+2 TZ</h2>
+					<h2>Obviously</h2>
+				</section>
+				<section>
+					<h1>Tools: find, grep, xargs, cat, python, atom, byzanz, reveal.js</h1>
+				</section>
+				<section>
+					<img height="600px" src="img/que.jpg">
+				</section>
+
+				<div style="display: block; position: absolute; bottom: 16px; left: 45%; margin-left: -139px; z-index: 20; font-size: 50%">
+        			<a href="http://vharitonsky.github.io/not_testing/">http://vharitonsky.github.io/not_testing/</a>
+    			</div>
+			</div>
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+				transition: 'convex', // none/fade/slide/convex/concave/zoom
+			 	dependencies: [
+	        		{ src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
